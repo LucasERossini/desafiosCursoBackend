@@ -1,13 +1,13 @@
-const express = require('express')
+const express = require('express');
 
-const ProductosApi = require('../api/productos.js')
+const ProductosApi = require('../api/productos.js');
 
-const productosApi = new ProductosApi('./public/productos.txt')
+const productosApi = new ProductosApi('./public/productos.txt');
 
 const app = express()
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 //Set engine
 app.set('views', './views');
@@ -34,8 +34,8 @@ app.get('/productos', async (req, res) => {
 });
 
 //--------------------------------------------
-const PORT = 8080
+const PORT = 8080;
 const server = app.listen(PORT, () => {
-    console.log(`Servidor http escuchando en el puerto ${server.address().port}`)
-})
-server.on("error", error => console.log(`Error en servidor ${error}`))
+    console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
+});
+server.on("error", error => console.log(`Error en servidor ${error}`));
