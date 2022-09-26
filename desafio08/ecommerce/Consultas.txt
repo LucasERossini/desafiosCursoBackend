@@ -1,0 +1,218 @@
+5)
+a)
+db.productos.insertOne({title: "marcador", price: 250, thumbnail: "marcador.jpg", stock: 50})
+{
+  acknowledged: true,
+  insertedId: ObjectId("63226bb3be9e26b5223bb5a3")
+}
+
+b)i)
+ecommerce> db.productos.find({"price": {$lt: 1000}})
+[
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb599"),
+    title: 'regla',
+    price: 50,
+    thumbnail: 'regla.jpg',
+    stock: 1500
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59a"),
+    title: 'globo terráqueo',
+    price: 340,
+    thumbnail: 'globoTerraqueo.jpg',
+    stock: 5
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59b"),
+    title: 'escuadra',
+    price: 120,
+    thumbnail: 'escuadra.jpg',
+    stock: 1500
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59c"),
+    title: 'calculadora',
+    price: 230,
+    thumbnail: 'calculadora.jpg',
+    stock: 200
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59d"),
+    title: 'goma',
+    price: 30,
+    thumbnail: 'goma.jpg',
+    stock: 2000
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59e"),
+    title: 'lápiz',
+    price: 70,
+    thumbnail: 'lapiz.jpg',
+    stock: 3000
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59f"),
+    title: 'lapicera',
+    price: 100,
+    thumbnail: 'lapicera.jpg',
+    stock: 1500
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a0"),
+    title: 'compas',
+    price: 500,
+    thumbnail: 'compas.jpg',
+    stock: 10
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a1"),
+    title: 'trasportador',
+    price: 200,
+    thumbnail: 'transportador.jpg',
+    stock: 50
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a2"),
+    title: 'cartuchera',
+    price: 400,
+    thumbnail: 'cartuchera.jpg',
+    stock: 150
+  },
+  {
+    _id: ObjectId("63226bb3be9e26b5223bb5a3"),
+    title: 'marcador',
+    price: 250,
+    thumbnail: 'marcador.jpg',
+    stock: 50
+  }
+]
+
+b)ii)
+ecommerce> db.productos.find({$and: [{"price": {$gt: 1000}}, {"price": {$lt: 3000}}]})
+
+
+b)iii)
+ecommerce> db.productos.find({"price": {$gt: 3000}})
+
+
+b)iv)
+ecommerce> db.productos.find().skip(2).limit(1).sort({price: 1})
+[
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59e"),
+    title: 'lápiz',
+    price: 70,
+    thumbnail: 'lapiz.jpg',
+    stock: 3000
+  }
+]
+
+c)
+ecommerce> db.productos.updateMany({"price": {$lt: 1000}}, {$set: {"stock": 100}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 11,
+  modifiedCount: 11,
+  upsertedCount: 0
+}
+ecommerce> db.productos.find()
+[
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb599"),
+    title: 'regla',
+    price: 50,
+    thumbnail: 'regla.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59a"),
+    title: 'globo terráqueo',
+    price: 340,
+    thumbnail: 'globoTerraqueo.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59b"),
+    title: 'escuadra',
+    price: 120,
+    thumbnail: 'escuadra.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59c"),
+    title: 'calculadora',
+    price: 230,
+    thumbnail: 'calculadora.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59d"),
+    title: 'goma',
+    price: 30,
+    thumbnail: 'goma.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59e"),
+    title: 'lápiz',
+    price: 70,
+    thumbnail: 'lapiz.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb59f"),
+    title: 'lapicera',
+    price: 100,
+    thumbnail: 'lapicera.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a0"),
+    title: 'compas',
+    price: 500,
+    thumbnail: 'compas.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a1"),
+    title: 'trasportador',
+    price: 200,
+    thumbnail: 'transportador.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226a7ebe9e26b5223bb5a2"),
+    title: 'cartuchera',
+    price: 400,
+    thumbnail: 'cartuchera.jpg',
+    stock: 100
+  },
+  {
+    _id: ObjectId("63226bb3be9e26b5223bb5a3"),
+    title: 'marcador',
+    price: 250,
+    thumbnail: 'marcador.jpg',
+    stock: 100
+  }
+]
+
+d)
+ecommerce> db.productos.updateMany({"price": {$gt: 4000}}, {$set: {"stock": 0}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+e) lo cambié de 1000 a 100, porque si no me borraba todos
+ecommerce> db.productos.deleteMany({"price": {$lt: 100}})
+{ acknowledged: true, deletedCount: 3 }
+
+
+6)
+db.createUser({user: "pepe", pwd: "asd456", roles: [{role: "read", db: "dbforroles"}]})
+
