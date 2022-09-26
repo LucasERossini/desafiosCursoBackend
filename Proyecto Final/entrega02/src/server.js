@@ -42,23 +42,31 @@ function soloAdmins(req, res, next) {
 const productosRouter = new Router()
 
 productosRouter.get('/', async (req, res) => {
-    
+    console.log('Listando todos los productos');
+    res.send(await productosApi.listarAll());
 })
 
 productosRouter.get('/:id', async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Listando producto con id ${id}`);
+    res.send(await productosApi.listar(id));
 })
 
 productosRouter.post('/', soloAdmins, async (req, res) => {
-    
+    console.log('Agregar un nuevo producto');
+    res.send(await productosApi.guardar(req.body));
 })
 
 productosRouter.put('/:id', soloAdmins, async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Modificando producto con id ${id}`);
+    res.send(await productosApi.actualizar(req.body, id));
 })
 
 productosRouter.delete('/:id', soloAdmins, async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Eliminando producto con id ${id}`);
+    res.send(await productosApi.borrar(id));
 })
 
 //--------------------------------------------
@@ -67,30 +75,45 @@ productosRouter.delete('/:id', soloAdmins, async (req, res) => {
 const carritosRouter = new Router()
 
 carritosRouter.get('/', async (req, res) => {
-    
+    console.log('Listando todos los productos en carrito');
+    res.send(await carritosApi.listarAll());
 })
 
 carritosRouter.post('/', async (req, res) => {
-    
+    console.log('Creando nuevo carrito');
+    const productosCarrito = req.body;
+    res.send(await carritosApi.guardar({"productos": [productosCarrito]}));
 })
 
 carritosRouter.delete('/:id', async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Eliminando carrito con id ${id}`);
+    res.send(await carritosApi.borrar(id));
 })
 
 //--------------------------------------------------
 // router de productos en carrito
 
 carritosRouter.get('/:id/productos', async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Listando productos del carrito con id ${id}`);
+    const carrito = await carritosApi.listar(id);
+    res.send(await carrito.productos);
 })
 
 carritosRouter.post('/:id/productos', async (req, res) => {
-    
+    const { id } = req.params;
+    console.log(`Agregar un nuevo producto al carrito con id ${id}`);
+    const carrito = await carritosApi.listar(id);
+    const idProducto = req.body.id; // se envía un json con {"id": "id de producto"}
+    const productoCarrito = await productosApi.listar(idProducto);
+    carrito.productos.push(productoCarrito);
+    res.send(await carritosApi.actualizar(carrito, id));
 })
 
 carritosRouter.delete('/:id/productos/:idProd', async (req, res) => {
-    
+    const { id, id_prod } = req.params;    
+    res.send(await carritosApi.borrarPorDosId(id, id_prod));
 })
 
 //--------------------------------------------
