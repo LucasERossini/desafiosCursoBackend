@@ -1,5 +1,3 @@
-import { schema } from './normalizr';
-import util from './util';
 const socket = io.connect();
 
 //------------------------------------------------------------------------------------
@@ -38,26 +36,13 @@ function makeHtmlTable(productos) {
 
 /* --------------------- DESNORMALIZACIÓN DE MENSAJES ---------------------------- */
 // Definimos un esquema de autor
-const author = new schema.Entity('author', {}, {idAttribute: 'email'});
-
-// Definimos un esquema de texto
-const text = new schema.Entity('text');
+const schemaAuthor = new normalizr.schema.Entity('author', {}, { idAttribute: 'id' });
 
 // Definimos un esquema de mensaje
-const message = new schema.Entity('message', {
-    author: author,
-    texts: [text]
-});
+const schemaMensaje = new normalizr.schema.Entity('post', { author: schemaAuthor }, { idAttribute: '_id' })
 
 // Definimos un esquema de posts
-const posts = new schema.Entity('posts', {
-    posts: [message]
-});
-
-function denormalizarMensajes(objeto) {
-    const denormalizedData = denormalize(objeto.result, posts, objeto.entities);
-    return util.inspect(denormalizedData, false, 12, true);
-};
+const schemaMensajes = new normalizr.schema.Entity('posts', { mensajes: [schemaMensaje] }, { idAttribute: 'id' })
 
 /* ----------------------------------------------------------------------------- */
 
@@ -81,19 +66,27 @@ formPublicarMensaje.addEventListener('submit', e => {
         text: inputMensaje.value
     }
 
-    const mensajeDenormalizado = denormalizarMensajes(mensaje);
-    socket.emit('nuevoMensaje', mensajeDenormalizado);
+    socket.emit('nuevoMensaje', mensaje);
     formPublicarMensaje.reset()
     inputMensaje.focus()
 })
 
 socket.on('mensajes', mensajesN => {
 
+    const mensajesNsize = JSON.stringify(mensajesN).length
+    console.log(mensajesN, mensajesNsize);
+
+    const mensajesD = normalizr.denormalize(mensajesN.result, schemaMensajes, mensajesN.entities)
+
+    const mensajesDsize = JSON.stringify(mensajesD).length
+    console.log(mensajesD, mensajesDsize);
+
+    const porcentajeC = parseInt((mensajesNsize * 100) / mensajesDsize)
     console.log(`Porcentaje de compresión ${porcentajeC}%`)
     document.getElementById('compresion-info').innerText = porcentajeC
 
-    console.log(mensajesN.mensajes);
-    const html = makeHtmlList(mensajesN.mensajes);
+    console.log(mensajesD.mensajes);
+    const html = makeHtmlList(mensajesD.mensajes)
     document.getElementById('mensajes').innerHTML = html;
 })
 
